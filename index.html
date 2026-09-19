@@ -7,44 +7,29 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; }
     body { background-color: #f4f6f8; color: #2d3748; padding-bottom: 50px; }
-
-    /* Main Header */
     header { background-color: #128c7e; color: white; padding: 12px 16px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
     .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
     .header-top h1 { font-size: 17px; font-weight: bold; }
     .cart-btn { background: #25d366; color: white; border: none; padding: 7px 14px; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 13px; }
-
-    /* Search Box */
     .search-bar input { width: 100%; padding: 9px 15px; border-radius: 20px; border: none; outline: none; font-size: 13px; }
-
-    /* Category Navigation */
     .category-nav { background: white; padding: 8px 10px; display: flex; gap: 6px; overflow-x: auto; position: sticky; top: 85px; z-index: 90; box-shadow: 0 2px 4px rgba(0,0,0,0.05); scrollbar-width: none; }
     .category-nav::-webkit-scrollbar { display: none; }
     .cat-btn { background: #edf2f7; border: 1px solid #cbd5e0; padding: 6px 12px; border-radius: 16px; font-size: 12px; font-weight: 600; white-space: nowrap; cursor: pointer; color: #4a5568; }
     .cat-btn.active { background: #128c7e; color: white; border-color: #128c7e; }
-
     .container { max-width: 950px; margin: 12px auto; padding: 0 10px; }
     .section-title { font-size: 15px; font-weight: bold; margin-bottom: 10px; color: #2d3748; }
-
-    /* Grid */
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); gap: 10px; }
     .card { background: white; border-radius: 8px; padding: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); display: flex; flex-direction: column; justify-content: space-between; border: 1px solid #e2e8f0; position: relative; }
     .card h3 { font-size: 13px; margin: 5px 0; line-height: 1.3; min-height: 34px; }
     .card .price { font-weight: bold; color: #128c7e; font-size: 15px; margin-bottom: 6px; }
     .add-btn { background: #128c7e; color: white; border: none; padding: 7px; border-radius: 5px; width: 100%; font-weight: bold; cursor: pointer; font-size: 12px; }
-
-    /* Out of Stock */
     .card.out-of-stock { opacity: 0.6; background: #fff5f5; }
     .stock-badge { position: absolute; top: 6px; right: 6px; background: #e53e3e; color: white; font-size: 10px; font-weight: bold; padding: 2px 5px; border-radius: 4px; }
     .btn-disabled { background: #a0aec0 !important; cursor: not-allowed; }
-
-    /* Cart & Checkout Box */
     .cart-box { background: white; border: 2px solid #128c7e; border-radius: 8px; padding: 14px; margin-top: 20px; display: none; }
     .form-group { margin: 8px 0; }
     .form-group label { display: block; font-size: 11px; margin-bottom: 3px; font-weight: bold; }
     .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px; font-size: 13px; }
-
-    /* Payment Boxes */
     .payment-box { background: #eefdf7; border: 2px dashed #38b2ac; border-radius: 8px; padding: 10px; text-align: center; margin: 10px 0; }
     .direct-pay-btn { display: inline-block; width: 100%; background: #0070ba; color: white; text-decoration: none; padding: 9px; border-radius: 6px; font-weight: bold; font-size: 13px; margin-top: 5px; }
     .card-pay-btn { display: inline-block; width: 100%; background: #6772e5; color: white; text-decoration: none; padding: 10px; border-radius: 6px; font-weight: bold; font-size: 13px; margin-top: 5px; text-align: center; }
@@ -54,8 +39,6 @@
   </style>
 </head>
 <body>
-
-  <!-- Top Header -->
   <header>
     <div class="header-top">
       <h1>🛒 సూపర్ మార్ట్ (Super Mart)</h1>
@@ -66,7 +49,6 @@
     </div>
   </header>
 
-  <!-- Bilingual Category Navigation -->
   <div class="category-nav">
     <button class="cat-btn active" onclick="setCategory('All', this)">అన్నీ (All 500)</button>
     <button class="cat-btn" onclick="setCategory('Grains', this)">🌾 బియ్యం & పప్పులు (Grains & Dals)</button>
@@ -81,7 +63,6 @@
     <div class="section-title" id="catHeading">అన్ని ఉత్పత్తులు / All Products (500)</div>
     <div class="grid" id="grid"></div>
 
-    <!-- Cart & Payment Section -->
     <div class="cart-box" id="cartBox">
       <h3 style="color:#128c7e; margin-bottom: 8px;">ఆర్డర్ & పేమెంట్ వివరాలు / Order & Payment Details</h3>
       <div id="cartItems" style="margin: 8px 0; font-size: 13px;"></div>
@@ -93,7 +74,6 @@
       <div class="form-group"><label>మొబైల్ నంబర్ / Mobile Number:</label><input type="tel" id="cphone" placeholder="ఉదా: 9876543210"></div>
       <div class="form-group"><label>పూర్తి అడ్రస్ / Delivery Address:</label><textarea id="caddr" rows="2" placeholder="ఇంటి నెం, వీధి, ఊరు... / Door No, Street, Landmark..."></textarea></div>
 
-      <!-- Payment Mode Selector -->
       <div class="form-group">
         <label>చెల్లింపు విధానం / Payment Method:</label>
         <select id="payOption" onchange="togglePaymentSection()">
@@ -103,7 +83,6 @@
         </select>
       </div>
 
-      <!-- 1. UPI Section -->
       <div id="upi-container">
         <div class="payment-box">
           <h4>మొత్తం చెల్లించాల్సింది / Pay Total: ₹<span id="upi-amt">0</span></h4>
@@ -118,7 +97,6 @@
         </div>
       </div>
 
-      <!-- 2. Card Section -->
       <div id="card-container" style="display: none;">
         <div class="payment-box" style="background: #f7f9fd; border-color: #6772e5;">
           <h4>మొత్తం / Amount: ₹<span id="card-amt">0</span></h4>
@@ -130,7 +108,6 @@
         </div>
       </div>
 
-      <!-- 3. COD Section -->
       <div id="cod-info-box" style="background: #ebf8ff; border: 1px solid #3182ce; padding: 10px; border-radius: 6px; font-size: 12px; color: #2b6cb0; text-align: center; display: none;">
         💵 <strong>క్యాష్ ఆన్ డెలివరీ / Cash on Delivery:</strong><br>
         సరుకులు అందిన తర్వాత నగదు చెల్లించవచ్చు / Pay cash upon delivery.
@@ -146,9 +123,7 @@
     const storeUPI = "9553354623@ybl";
     const storeName = "Super Mart";
 
-    // ద్విభాషా వస్తువుల జాబితా (Telugu + English)
     const masterData = [
-      // 1. Grains & Dals
       { name: "సోనా మసూరి బియ్యం (Sona Masoori Rice) 25kg", cat: "Grains", p: 1450, stock: true },
       { name: "రాయల్ బాస్మతి బియ్యం (Royal Basmati Rice) 1kg", cat: "Grains", p: 180, stock: true },
       { name: "కందిపప్పు (Toor Dal) 1kg", cat: "Grains", p: 165, stock: true },
@@ -159,8 +134,6 @@
       { name: "మైదా పిండి (Maida Flour) 1kg", cat: "Grains", p: 45, stock: true },
       { name: "బొంబాయి రవ్వ (Upma Rava) 1kg", cat: "Grains", p: 45, stock: true },
       { name: "ఇడ్లీ రవ్వ (Idli Rava) 1kg", cat: "Grains", p: 42, stock: true },
-
-      // 2. Oils & Spices
       { name: "ఫ్రీడమ్ సన్‌ఫ్లవర్ ఆయిల్ (Freedom Sunflower Oil) 5L", cat: "Oils", p: 660, stock: true },
       { name: "వేరుశనగ నూనె (Groundnut Oil) 1L", cat: "Oils", p: 185, stock: true },
       { name: "స్వచ్ఛమైన ఆవు నెయ్యి (Pure Cow Ghee) 500ml", cat: "Oils", p: 330, stock: true },
@@ -171,8 +144,6 @@
       { name: "జీలకర్ర (Cumin / Jeera) 200g", cat: "Oils", p: 70, stock: true },
       { name: "ఆవాలు (Mustard Seeds) 200g", cat: "Oils", p: 30, stock: true },
       { name: "గరం మసాలా (Garam Masala) 100g", cat: "Oils", p: 45, stock: true },
-
-      // 3. Soaps & Care
       { name: "సంతూర్ చందనం సోప్ (Santoor Soap 4-pack)", cat: "Care", p: 145, stock: true },
       { name: "డెట్టాల్ సోప్ (Dettol Soap 4-pack)", cat: "Care", p: 160, stock: true },
       { name: "లక్స్ రోజ్ సోప్ (Lux Rose Soap 4-pack)", cat: "Care", p: 140, stock: true },
@@ -183,8 +154,6 @@
       { name: "పారాచూట్ కొబ్బరి నూనె (Parachute Coconut Oil) 500ml", cat: "Care", p: 175, stock: true },
       { name: "ఫాగ్ పెర్ఫ్యూమ్ (Fogg Scent Spray) 100ml", cat: "Care", p: 220, stock: true },
       { name: "కోల్‌గేట్ టూత్‌పేస్ట్ (Colgate MaxFresh) 300g", cat: "Care", p: 145, stock: true },
-
-      // 4. Cleaning
       { name: "సర్ఫ్ ఎక్సెల్ డిటర్జెంట్ (Surf Excel) 2kg", cat: "Cleaning", p: 260, stock: true },
       { name: "ఏరియల్ మాట్రిక్ పౌడర్ (Ariel Detergent) 2kg", cat: "Cleaning", p: 290, stock: true },
       { name: "రిన్ బార్ సోపులు (Rin Soap 4-pack)", cat: "Cleaning", p: 50, stock: true },
@@ -193,28 +162,23 @@
       { name: "లైజాల్ ఫ్లోర్ క్లీనర్ (Lizol Floor Cleaner) 1L", cat: "Cleaning", p: 185, stock: true },
       { name: "ఆల్ అవుట్ దోమల రీఫిల్ (All Out Refill 2-pack)", cat: "Cleaning", p: 145, stock: true },
       { name: "గడ్డి చీపురు కట్ట (Grass Broom)", cat: "Cleaning", p: 80, stock: true },
-
-      // 5. Puja
       { name: "సైకిల్ ప్యూర్ అగర్‌బత్తీలు (Cycle Agarbatti)", cat: "Puja", p: 65, stock: true },
       { name: "మంగళం కర్పూరం (Mangalam Camphor) 100g", cat: "Puja", p: 60, stock: true },
       { name: "పూజ దీపం నూనె (Pooja Deepam Oil) 1L", cat: "Puja", p: 135, stock: true },
       { name: "పూజ ఒత్తులు ప్యాకెట్ (Cotton Pooja Wicks)", cat: "Puja", p: 25, stock: true },
-
-      // 6. Snacks
       { name: "రెడ్ లేబుల్ టీ పొడి (Red Label Tea) 250g", cat: "Snacks", p: 145, stock: true },
       { name: "బ్రూ ఇన్‌స్టంట్ కాఫీ (Bru Instant Coffee) 100g", cat: "Snacks", p: 95, stock: true },
       { name: "హార్లిక్స్ మాల్ట్ (Horlicks Malt Drink) 500g", cat: "Snacks", p: 240, stock: true },
       { name: "పార్లే-జి బిస్కెట్లు (Parle-G Biscuits) 250g", cat: "Snacks", p: 30, stock: true }
     ];
 
-    // 500 వస్తువుల పూర్తి డేటాబేస్ (Bilingual + Out of stock)
     const prods = [];
     let pid = 1;
     while (prods.length < 500) {
       masterData.forEach((item) => {
         if (prods.length < 500) {
           const packNo = Math.floor(prods.length / masterData.length) + 1;
-          const isAvailable = (pid % 18 !== 0); // అవుట్ ఆఫ్ స్టాక్ ఎగ్జాంపుల్
+          const isAvailable = (pid % 18 !== 0);
           prods.push({
             id: pid++,
             name: packNo === 1 ? item.name : `${item.name} - ప్యాక్/Pack ${packNo}`,
@@ -301,6 +265,11 @@
       document.getElementById('cod-info-box').style.display = opt === 'COD' ? 'block' : 'none';
     }
 
+    function generateBillNo() {
+      const randomDigits = Math.floor(1000 + Math.random() * 9000);
+      return `SG-${randomDigits}`;
+    }
+
     function sendOrder() {
       const name = document.getElementById('cname').value.trim();
       const phone = document.getElementById('cphone').value.trim();
@@ -330,9 +299,10 @@
         payStatus = `💵 *పేమెంట్ / Payment:* క్యాష్ ఆన్ డెలివరీ / Cash on Delivery (COD)\n⚠️ డెలివరీ సమయంలో నగదు ఇవ్వాలి / Pay on delivery.`;
       }
 
+      const billNo = generateBillNo();
       const total = document.getElementById('totalPrice').innerText;
       const list = cart.map((x, i) => `${i+1}. ${x.name} - ₹${x.price}`).join('\n');
-      const msg = `🛍️ *కొత్త ఆర్డర్ / New Order (Super Mart)*\n-----------------------------\n👤 పేరు / Name: ${name}\n📞 ఫోన్ / Phone: ${phone}\n📍 అడ్రస్ / Address: ${addr}\n-----------------------------\n${payStatus}\n-----------------------------\n🛒 *వస్తువులు / Items:*\n${list}\n-----------------------------\n💰 *మొత్తం బిల్లు / Total Bill: ₹${total}*`;
+      const msg = `🧾 *ఆర్డర్ / బిల్లు నం (Bill No):* #${billNo}\n-----------------------------\n👤 పేరు / Name: ${name}\n📞 ఫోన్ / Phone: ${phone}\n📍 అడ్రస్ / Address: ${addr}\n-----------------------------\n${payStatus}\n-----------------------------\n🛒 *వస్తువులు / Items:*\n${list}\n-----------------------------\n💰 *మొత్తం బిల్లు / Total Bill: ₹${total}*`;
 
       window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(msg)}`, '_blank');
       cart = [];
@@ -344,4 +314,3 @@
   </script>
 </body>
 </html>
-
