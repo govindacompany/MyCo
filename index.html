@@ -3,81 +3,100 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>మై మార్ట్ - వెరిఫైడ్ UPI ఆర్డరింగ్</title>
+  <title>మెగా సూపర్ మార్ట్ - 500+ నిత్యావసర సరుకులు</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
     body { background-color: #f7fafc; color: #2d3748; padding-bottom: 30px; }
-    header { background-color: #128c7e; color: white; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
-    header h1 { font-size: 18px; font-weight: 700; }
-    .cart-btn { background: #25d366; color: white; border: none; padding: 8px 14px; border-radius: 20px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 14px; }
-    .container { max-width: 1000px; margin: 15px auto; padding: 0 12px; }
+    header { background-color: #128c7e; color: white; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    header h1 { font-size: 17px; font-weight: 700; }
+    .cart-btn { background: #25d366; color: white; border: none; padding: 8px 14px; border-radius: 20px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 13px; }
     
+    .container { max-width: 1100px; margin: 12px auto; padding: 0 10px; }
+    
+    /* Search Bar */
+    .search-box { width: 100%; margin-bottom: 12px; }
+    .search-box input { width: 100%; padding: 10px 14px; border: 2px solid #cbd5e0; border-radius: 25px; font-size: 14px; outline: none; transition: 0.2s; }
+    .search-box input:focus { border-color: #128c7e; background: #fff; }
+
     /* Categories */
-    .filters { display: flex; gap: 8px; margin-bottom: 15px; overflow-x: auto; padding-bottom: 5px; }
-    .filter-btn { background: white; border: 1px solid #cbd5e0; padding: 6px 14px; border-radius: 20px; cursor: pointer; font-size: 13px; font-weight: 600; white-space: nowrap; }
+    .filters { display: flex; gap: 6px; margin-bottom: 15px; overflow-x: auto; padding-bottom: 6px; scrollbar-width: none; }
+    .filters::-webkit-scrollbar { display: none; }
+    .filter-btn { background: white; border: 1px solid #cbd5e0; padding: 6px 12px; border-radius: 18px; cursor: pointer; font-size: 12px; font-weight: 600; white-space: nowrap; flex-shrink: 0; }
     .filter-btn.active { background: #128c7e; color: white; border-color: #128c7e; }
 
     /* Product Grid */
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
-    .card { background: white; border-radius: 8px; padding: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between; }
-    .card img { width: 100%; height: 110px; object-fit: cover; border-radius: 6px; margin-bottom: 8px; }
-    .card h3 { font-size: 14px; margin-bottom: 4px; }
-    .card .unit { color: #718096; font-size: 12px; margin-bottom: 4px; }
-    .card .price { font-size: 15px; font-weight: bold; color: #2d3748; margin-bottom: 8px; }
-    .add-btn { background-color: #128c7e; color: white; border: none; padding: 8px; border-radius: 5px; cursor: pointer; font-weight: 600; width: 100%; font-size: 13px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+    .card { background: white; border-radius: 8px; padding: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between; border: 1px solid #edf2f7; }
+    .card img { width: 100%; height: 95px; object-fit: cover; border-radius: 6px; margin-bottom: 6px; }
+    .card h3 { font-size: 13px; margin-bottom: 3px; line-height: 1.2; height: 32px; overflow: hidden; }
+    .card .unit { color: #718096; font-size: 11px; margin-bottom: 4px; }
+    .card .price { font-size: 14px; font-weight: bold; color: #2d3748; margin-bottom: 8px; }
+    .add-btn { background-color: #128c7e; color: white; border: none; padding: 7px; border-radius: 5px; cursor: pointer; font-weight: 600; width: 100%; font-size: 12px; }
 
     /* Cart Sidebar */
     .cart-drawer { position: fixed; right: -100%; top: 0; width: 100%; max-width: 360px; height: 100%; background: white; box-shadow: -4px 0 15px rgba(0,0,0,0.15); transition: right 0.3s ease; z-index: 200; display: flex; flex-direction: column; }
     .cart-drawer.open { right: 0; }
-    .cart-header { padding: 15px; background: #128c7e; color: white; display: flex; justify-content: space-between; align-items: center; }
+    .cart-header { padding: 14px; background: #128c7e; color: white; display: flex; justify-content: space-between; align-items: center; }
     .close-btn { background: none; border: none; color: white; font-size: 24px; cursor: pointer; }
-    .cart-items { flex: 1; overflow-y: auto; padding: 15px; }
-    .cart-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid #edf2f7; padding-bottom: 8px; }
-    .cart-footer { padding: 15px; border-top: 1px solid #e2e8f0; background: #f8fafc; }
-    .total-row { display: flex; justify-content: space-between; font-size: 16px; font-weight: bold; margin-bottom: 12px; }
-    .checkout-btn { width: 100%; background: #25d366; color: white; border: none; padding: 12px; border-radius: 6px; font-size: 15px; font-weight: bold; cursor: pointer; }
+    .cart-items { flex: 1; overflow-y: auto; padding: 12px; }
+    .cart-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid #edf2f7; padding-bottom: 6px; font-size: 13px; }
+    .cart-footer { padding: 14px; border-top: 1px solid #e2e8f0; background: #f8fafc; }
+    .total-row { display: flex; justify-content: space-between; font-size: 15px; font-weight: bold; margin-bottom: 10px; }
+    .checkout-btn { width: 100%; background: #25d366; color: white; border: none; padding: 11px; border-radius: 6px; font-size: 14px; font-weight: bold; cursor: pointer; }
 
     /* Checkout Modal */
-    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 300; justify-content: center; align-items: center; overflow-y: auto; }
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 300; justify-content: center; align-items: center; }
     .modal.active { display: flex; }
-    .modal-content { background: white; padding: 18px; border-radius: 10px; width: 92%; max-width: 420px; max-height: 90vh; overflow-y: auto; }
-    .modal-content h2 { margin-bottom: 10px; font-size: 17px; color: #128c7e; }
-    .form-group { margin-bottom: 10px; }
-    .form-group label { display: block; font-size: 12px; margin-bottom: 4px; font-weight: 600; }
-    .form-group input, .form-group textarea { width: 100%; padding: 8px; border: 1px solid #cbd5e0; border-radius: 5px; font-size: 13px; }
+    .modal-content { background: white; padding: 16px; border-radius: 10px; width: 92%; max-width: 420px; max-height: 90vh; overflow-y: auto; }
+    .modal-content h2 { margin-bottom: 10px; font-size: 16px; color: #128c7e; }
+    .form-group { margin-bottom: 8px; }
+    .form-group label { display: block; font-size: 11px; margin-bottom: 3px; font-weight: 600; }
+    .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 7px; border: 1px solid #cbd5e0; border-radius: 5px; font-size: 13px; }
 
-    /* Payment Box */
-    .payment-box { background: #eefdf7; border: 2px dashed #38b2ac; border-radius: 8px; padding: 12px; text-align: center; margin: 12px 0; }
-    .direct-pay-btn { display: inline-block; width: 100%; background: #0070ba; color: white; text-decoration: none; padding: 10px; border-radius: 6px; font-weight: bold; font-size: 14px; margin-top: 6px; }
-    .qr-img { width: 140px; height: 140px; border-radius: 6px; border: 1px solid #ddd; margin: 6px auto; display: block; }
+    /* Payment Boxes */
+    .payment-box { background: #eefdf7; border: 2px dashed #38b2ac; border-radius: 8px; padding: 10px; text-align: center; margin: 10px 0; }
+    .direct-pay-btn { display: inline-block; width: 100%; background: #0070ba; color: white; text-decoration: none; padding: 9px; border-radius: 6px; font-weight: bold; font-size: 13px; margin-top: 5px; }
+    .card-pay-btn { display: inline-block; width: 100%; background: #6772e5; color: white; text-decoration: none; padding: 10px; border-radius: 6px; font-weight: bold; font-size: 13px; margin-top: 5px; text-align: center; }
+    .qr-img { width: 120px; height: 120px; border-radius: 6px; border: 1px solid #ddd; margin: 5px auto; display: block; }
     
-    /* Transaction ID Box */
-    .utr-box { background: #fffaf0; border: 1px solid #dd6b20; padding: 10px; border-radius: 6px; margin: 10px 0; }
-    .utr-box label { color: #c05621; font-weight: bold; font-size: 12px; }
-    .utr-box input { border: 2px solid #dd6b20; font-weight: bold; letter-spacing: 1px; }
+    .verify-box { background: #fffaf0; border: 1px solid #dd6b20; padding: 8px; border-radius: 6px; margin: 8px 0; }
+    .verify-box label { color: #c05621; font-weight: bold; font-size: 11px; }
+    .verify-box input { border: 2px solid #dd6b20; font-weight: bold; }
 
-    .whatsapp-submit-btn { background: #25d366; color: white; border: none; padding: 12px; border-radius: 6px; width: 100%; font-size: 15px; font-weight: bold; cursor: pointer; margin-top: 8px; }
+    .cod-info-box { background: #ebf8ff; border: 1px solid #3182ce; padding: 8px; border-radius: 6px; margin: 8px 0; font-size: 12px; color: #2b6cb0; text-align: center; display: none; }
+    .whatsapp-submit-btn { background: #25d366; color: white; border: none; padding: 11px; border-radius: 6px; width: 100%; font-size: 14px; font-weight: bold; cursor: pointer; margin-top: 8px; }
   </style>
 </head>
 <body>
 
   <header>
-    <h1>🛒 మై స్టోర్ (My Mart)</h1>
+    <h1>🛒 మెగా మార్ట్ (500+ Items)</h1>
     <button class="cart-btn" onclick="toggleCart()">🛒 కార్ట్ (<span id="cart-count">0</span>)</button>
   </header>
 
   <div class="container">
-    <div class="filters">
-      <button class="filter-btn active" onclick="filterCategory('All')">అన్నీ (All)</button>
-      <button class="filter-btn" onclick="filterCategory('Grains & Dals')">పప్పులు & బియ్యం</button>
-      <button class="filter-btn" onclick="filterCategory('Oils & Spices')">నూనెలు & మసాలాలు</button>
-      <button class="filter-btn" onclick="filterCategory('Dairy')">పాల ఉత్పత్తులు</button>
-      <button class="filter-btn" onclick="filterCategory('Snacks')">స్నాక్స్ & టీ</button>
+    <!-- Live Search -->
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="🔍 ఏదైనా సరుకు పేరు వెతకండి (ఉదా: Rice, Lux, Horlicks, Surf...)" onkeyup="filterItems()">
     </div>
+
+    <!-- Category Filters -->
+    <div class="filters">
+      <button class="filter-btn active" onclick="setCategory('All', this)">అన్నీ (All 500)</button>
+      <button class="filter-btn" onclick="setCategory('Grains', this)">🌾 బియ్యం & పప్పులు</button>
+      <button class="filter-btn" onclick="setCategory('Oils', this)">🫒 నూనెలు & మసాలాలు</button>
+      <button class="filter-btn" onclick="setCategory('Care', this)">🧴 సోపులు & పెర్ఫ్యూమ్స్</button>
+      <button class="filter-btn" onclick="setCategory('Cleaning', this)">🧹 క్లీనింగ్ & వాషింగ్</button>
+      <button class="filter-btn" onclick="setCategory('Puja', this)">🪔 పూజా సామాగ్రి</button>
+      <button class="filter-btn" onclick="setCategory('Snacks', this)">☕ టీ & బిస్కెట్లు</button>
+      <button class="filter-btn" onclick="setCategory('Dairy', this)">🥛 పాలు, నెయ్యి & బేబీ</button>
+    </div>
+
+    <!-- Product Grid -->
     <div class="grid" id="product-grid"></div>
   </div>
 
-  <!-- Cart Drawer -->
+  <!-- Cart Sidebar -->
   <div class="cart-drawer" id="cartDrawer">
     <div class="cart-header">
       <h3>మీ కార్ట్ (Cart)</h3>
@@ -95,7 +114,7 @@
     </div>
   </div>
 
-  <!-- Modal -->
+  <!-- Checkout Modal -->
   <div class="modal" id="checkoutModal">
     <div class="modal-content">
       <h2>ఆర్డర్ & పేమెంట్ వివరాలు</h2>
@@ -113,182 +132,127 @@
         <textarea id="custAddress" rows="2" placeholder="ఇంటి నెం, వీధి, ఏరియా..."></textarea>
       </div>
 
-      <!-- UPI Payment Section -->
-      <div class="payment-box">
-        <h4>చెల్లించాల్సిన మొత్తం: <span id="pay-total-amount" style="color: #c53030; font-size: 16px;">₹0</span></h4>
-        
-        <a id="upi-direct-link" href="#" class="direct-pay-btn">
-          ⚡ 1. ఇక్కడ నొక్కి UPI యాప్‌లో చెల్లించండి
-        </a>
-
-        <div style="margin: 6px 0; font-size: 11px; color: #718096;">(లేదా క్రింది QR కోడ్‌కి చెల్లించండి)</div>
-        <img id="upi-qr" class="qr-img" src="" alt="UPI QR Code">
-        <small style="color: #4a5568; font-size: 11px;">UPI ID: <strong>9553354623@ybl</strong></small>
+      <div class="form-group">
+        <label>చెల్లింపు విధానం (Payment Option):</label>
+        <select id="payOption" onchange="togglePaymentSection()">
+          <option value="UPI">ఆన్‌లైన్ UPI పేమెంట్ (GPay / PhonePe / QR)</option>
+          <option value="CARD">క్రెడిట్ కార్డ్ / డెబిట్ కార్డ్</option>
+          <option value="COD">క్యాష్ ఆన్ డెలివరీ (Cash on Delivery)</option>
+        </select>
       </div>
 
-      <!-- Verification Input -->
-      <div class="utr-box">
-        <label>⚠️ 2. పేమెంట్ చేసాక వచ్చే 12 అంకెల UTR / Ref No. ఎంటర్ చేయండి:</label>
-        <input type="text" id="txnId" placeholder="12 అంకెల నంబర్ (ఉదా: 428192837482)" maxlength="16">
-        <small style="font-size: 10px; color: #744210;">(PhonePe/GPay పేమెంట్ రిసిప్ట్‌లో UTR/UPI Ref No ఉంటుంది)</small>
+      <!-- UPI -->
+      <div id="upi-container">
+        <div class="payment-box">
+          <h4>మొత్తం: <span id="pay-total-amount" style="color: #c53030;">₹0</span></h4>
+          <a id="upi-direct-link" href="#" class="direct-pay-btn">⚡ GPay / PhonePe లో చెల్లించండి</a>
+          <div style="margin: 4px 0; font-size: 11px; color: #718096;">(లేదా QR కోడ్ స్కాన్ చేయండి)</div>
+          <img id="upi-qr" class="qr-img" src="" alt="UPI QR">
+          <small style="color: #4a5568; font-size: 11px;">UPI: <strong>9553354623@ybl</strong></small>
+        </div>
+        <div class="verify-box">
+          <label>⚠️ పేమెంట్ చేసాక 12 అంకెల UTR / Ref No. నమోదు చేయండి:</label>
+          <input type="text" id="txnId" placeholder="12 అంకెల UTR నంబర్" maxlength="16">
+        </div>
       </div>
 
-      <button class="whatsapp-submit-btn" onclick="sendWhatsAppOrder()">
-        ✅ పేమెంట్ వెరిఫై చేసి ఆర్డర్ పంపండి
-      </button>
-      <button style="width: 100%; margin-top: 8px; background: none; border: none; color: #718096; cursor: pointer; font-size: 13px;" onclick="closeCheckout()">రద్దు చేయండి</button>
+      <!-- Cards -->
+      <div id="card-container" style="display: none;">
+        <div class="payment-box" style="background: #f7f9fd; border-color: #6772e5;">
+          <h4>మొత్తం: <span id="card-total-amount" style="color: #c53030;">₹0</span></h4>
+          <a id="card-gateway-link" href="https://razorpay.me/@mymart" target="_blank" class="card-pay-btn">💳 కార్డ్ పేమెంట్ గేట్‌వే ఓపెన్ చేయండి</a>
+        </div>
+        <div class="verify-box">
+          <label>⚠️ కార్డ్ పేమెంట్ Payment ID నమోదు చేయండి:</label>
+          <input type="text" id="cardTxnId" placeholder="ఉదా: pay_Nq87s2..." maxlength="25">
+        </div>
+      </div>
+
+      <!-- COD -->
+      <div id="cod-info-box" class="cod-info-box">
+        💵 <strong>క్యాష్ ఆన్ డెలివరీ:</strong> వస్తువులు అందిన తర్వాత నగదు చెల్లించవచ్చు.
+      </div>
+
+      <button class="whatsapp-submit-btn" onclick="sendWhatsAppOrder()">📲 WhatsApp లో ఆర్డర్ పంపండి</button>
+      <button style="width: 100%; margin-top: 8px; background: none; border: none; color: #718096; cursor: pointer; font-size: 12px;" onclick="closeCheckout()">రద్దు చేయండి</button>
     </div>
   </div>
 
   <script>
     const storeWhatsAppNumber = "919553354623";
     const storeUPI = "9553354623@ybl";
-    const storeName = "My Mart";
+    const storeName = "Mega Mart";
 
-    const products = [
-      { id: 1, name: "సోనా మసూరి బియ్యం", cat: "Grains & Dals", price: 650, unit: "10 kg", img: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=300" },
-      { id: 2, name: "కందిపప్పు (Toor Dal)", cat: "Grains & Dals", price: 160, unit: "1 kg", img: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=300" },
-      { id: 3, name: "సన్‌ఫ్లవర్ ఆయిల్", cat: "Oils & Spices", price: 135, unit: "1 Litre", img: "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=300" },
-      { id: 4, name: "ఆశీర్వాద్ గోధుమ పిండి", cat: "Grains & Dals", price: 245, unit: "5 kg", img: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=300" },
-      { id: 5, name: "తాజా పాలు (Milk)", cat: "Dairy", price: 34, unit: "500 ml", img: "https://images.unsplash.com/photo-1550583724-b2692b85b150?w=300" },
-      { id: 6, name: "స్వచ్ఛమైన నెయ్యి (Ghee)", cat: "Dairy", price: 330, unit: "500 ml", img: "https://images.unsplash.com/photo-1627483262268-9c2b5b2834b5?w=300" },
-      { id: 7, name: "టీ పొడి (Tea)", cat: "Snacks", price: 140, unit: "250 g", img: "https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=300" },
-      { id: 8, name: "బిస్కెట్స్ (Biscuits)", cat: "Snacks", price: 30, unit: "1 Pack", img: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=300" }
-    ];
+    // 500 ఉత్పత్తుల పూర్తి డేటాబేస్ (Family Monthly Pack)
+    const baseItems = [
+      // Grains & Dals
+      ["సోనా మసూరి బియ్యం (HMT)", "Grains", 1550, "25 kg", "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=300"],
+      ["సోనా మసూరి ప్రీమియం బియ్యం", "Grains", 680, "10 kg", "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=300"],
+      ["దావత్ బాస్మతి బియ్యం (Rozana)", "Grains", 420, "5 kg", "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=300"],
+      ["ఇండియా గేట్ బాస్మతి బియ్యం (Feast)", "Grains", 195, "1 kg", "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=300"],
+      ["ఫట్కా కందిపప్పు (Super Toor Dal)", "Grains", 175, "1 kg", "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=300"],
+      ["నాటు కందిపప్పు (Desi Toor Dal)", "Grains", 160, "1 kg", "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=300"],
+      ["మినప గుళ్ళు (White Urad Dal)", "Grains", 155, "1 kg", "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=300"],
+      ["మినప పొట్టు పప్పు (Black Urad Split)", "Grains", 130, "1 kg", "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=300"],
+      ["పసుపు పెసరపప్పు (Yellow Moong)", "Grains", 135, "1 kg", "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=300"],
+      ["పొట్టు పెసరపప్పు (Green Moong Split)", "Grains", 125, "1 kg", "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=300"],
+      ["శనగపప్పు (Chana Dal)", "Grains", 98, "1 kg", "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=300"],
+      ["మసూర్ దాల్ (ఎర్ర కందిపప్పు)", "Grains", 92, "1 kg", "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=300"],
+      ["ఆశీర్వాద్ సెలెక్ట్ శర్బతి ఆటా", "Grains", 295, "5 kg", "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=300"],
+      ["ఆశీర్వాద్ హోల్ వీట్ ఆటా", "Grains", 470, "10 kg", "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=300"],
+      ["ఫార్చ్యూన్ చక్కి ఫ్రెష్ ఆటా", "Grains", 230, "5 kg", "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=300"],
+      ["గోధుమ రవ్వ (Bansi Rava)", "Grains", 48, "1 kg", "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=300"],
+      ["ముతక గోధుమ రవ్వ", "Grains", 45, "1 kg", "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=300"],
+      ["ఇడ్లీ రవ్వ (ప్రీమియం బాయిల్డ్)", "Grains", 44, "1 kg", "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=300"],
+      ["బొంబాయి రవ్వ (Upma Sooji)", "Grains", 46, "1 kg", "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=300"],
+      ["మైదా పిండి (Fine Maida)", "Grains", 45, "1 kg", "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=300"],
+      ["శనగపిండి (Besan Flour)", "Grains", 95, "1 kg", "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=300"],
+      ["వరి పిండి (Rice Flour)", "Grains", 52, "1 kg", "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=300"],
+      ["రాగి పిండి (Finger Millet)", "Grains", 58, "1 kg", "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=300"],
+      ["జొన్న పిండి (Jowar Flour)", "Grains", 62, "1 kg", "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=300"],
+      ["సజ్జ పిండి (Bajra Flour)", "Grains", 55, "1 kg", "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=300"],
+      ["మొక్కజొన్న పిండి (Corn Flour)", "Grains", 40, "500 g", "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=300"],
+      ["తెల్ల శనగలు (Kabuli Chana)", "Grains", 145, "1 kg", "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=300"],
+      ["నల్ల శనగలు (Desi Chana)", "Grains", 92, "1 kg", "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=300"],
+      ["ఎర్ర రాజ్మా (Red Kidney Beans)", "Grains", 155, "1 kg", "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=300"],
+      ["చిత్ర రాజ్మా (Chitra Rajma)", "Grains", 165, "1 kg", "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=300"],
+      ["అలసందలు / బొబ్బర్లు (Cowpeas)", "Grains", 110, "1 kg", "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=300"],
+      ["పచ్చి బఠాణీ (Dried Green Peas)", "Grains", 105, "1 kg", "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=300"],
+      ["తెల్ల బఠాణీ (White Peas)", "Grains", 88, "1 kg", "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=300"],
+      ["సన్న అటుకులు (Thin Poha)", "Grains", 58, "1 kg", "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=300"],
+      ["లావు అటుకులు (Thick Poha)", "Grains", 56, "1 kg", "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=300"],
+      ["రెడ్ రైస్ అటుకులు (Red Poha)", "Grains", 75, "1 kg", "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=300"],
+      ["మరమరాలు (Puffed Rice)", "Grains", 35, "500 g", "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=300"],
+      ["సగ్గుబియ్యం పెద్దవి (Sabudana Big)", "Grains", 90, "1 kg", "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=300"],
+      ["సగ్గుబియ్యం చిన్నవి (Nylon Sabudana)", "Grains", 95, "1 kg", "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=300"],
+      ["సేమియా ప్యాకెట్ (Bambino)", "Grains", 36, "500 g", "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=300"],
+      ["వేయించిన సేమియా (Roasted)", "Grains", 45, "500 g", "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=300"],
+      ["బ్రౌన్ రైస్ (Daawat Brown)", "Grains", 140, "1 kg", "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=300"],
+      ["కొర్రలు (Foxtail Millets)", "Grains", 95, "1 kg", "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=300"],
+      ["అరికెలు (Kodo Millets)", "Grains", 110, "1 kg", "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=300"],
+      ["సామలు (Little Millets)", "Grains", 115, "1 kg", "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=300"],
+      ["ఊదలు (Barnyard Millets)", "Grains", 120, "1 kg", "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=300"],
+      ["అండుకొర్రలు (Browntop Millets)", "Grains", 145, "1 kg", "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=300"],
+      ["పల్లీలు (Groundnuts)", "Grains", 145, "1 kg", "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=300"],
+      ["పుట్నాల పప్పు (Fried Gram)", "Grains", 68, "500 g", "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=300"],
+      ["బార్లీ గింజలు (Barley)", "Grains", 45, "500 g", "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=300"],
 
-    let cart = [];
-
-    function renderProducts(items) {
-      document.getElementById("product-grid").innerHTML = items.map(p => `
-        <div class="card">
-          <img src="${p.img}" alt="${p.name}">
-          <div>
-            <h3>${p.name}</h3>
-            <div class="unit">${p.unit}</div>
-            <div class="price">₹${p.price}</div>
-          </div>
-          <button class="add-btn" onclick="addToCart(${p.id})">+ కార్ట్‌కు జోడించు</button>
-        </div>
-      `).join('');
-    }
-
-    function filterCategory(cat) {
-      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-      event.target.classList.add('active');
-      if (cat === 'All') renderProducts(products);
-      else renderProducts(products.filter(p => p.cat === cat));
-    }
-
-    function addToCart(id) {
-      const prod = products.find(p => p.id === id);
-      const item = cart.find(i => i.id === id);
-      if (item) item.qty += 1;
-      else cart.push({ ...prod, qty: 1 });
-      updateCart();
-    }
-
-    function removeFromCart(id) {
-      const item = cart.find(i => i.id === id);
-      if (item) {
-        item.qty -= 1;
-        if (item.qty <= 0) cart = cart.filter(i => i.id !== id);
-      }
-      updateCart();
-    }
-
-    function updateCart() {
-      const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
-      const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-      document.getElementById("cart-count").innerText = totalItems;
-      document.getElementById("cart-total").innerText = `₹${totalPrice}`;
-
-      if (cart.length === 0) {
-        document.getElementById("cart-items").innerHTML = '<p style="text-align: center; color: #a0aec0; margin-top: 40px;">కార్ట్ ఖాళీగా ఉంది.</p>';
-        return;
-      }
-
-      document.getElementById("cart-items").innerHTML = cart.map(item => `
-        <div class="cart-item">
-          <div>
-            <strong>${item.name}</strong><br>
-            <small>₹${item.price} x ${item.qty}</small>
-          </div>
-          <div>
-            <span style="font-weight: bold;">₹${item.price * item.qty}</span>
-            <button onclick="removeFromCart(${item.id})" style="margin-left: 6px; background: #e53e3e; color: white; border: none; padding: 2px 7px; border-radius: 4px; cursor: pointer;">-</button>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function toggleCart() { document.getElementById("cartDrawer").classList.toggle("open"); }
-
-    function openCheckout() {
-      if (cart.length === 0) { alert("ముందుగా కొన్ని వస్తువులను కార్ట్‌లో జోడించండి!"); return; }
-      
-      const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-      document.getElementById("pay-total-amount").innerText = `₹${totalPrice}`;
-
-      const upiUrl = `upi://pay?pa=${storeUPI}&pn=${encodeURIComponent(storeName)}&am=${totalPrice}&cu=INR&tn=Order%20Payment`;
-      document.getElementById("upi-direct-link").setAttribute("href", upiUrl);
-
-      const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(upiUrl)}`;
-      document.getElementById("upi-qr").setAttribute("src", qrApiUrl);
-
-      toggleCart();
-      document.getElementById("checkoutModal").classList.add("active");
-    }
-
-    function closeCheckout() { document.getElementById("checkoutModal").classList.remove("active"); }
-
-    function sendWhatsAppOrder() {
-      const name = document.getElementById("custName").value.trim();
-      const phone = document.getElementById("custPhone").value.trim();
-      const address = document.getElementById("custAddress").value.trim();
-      const txnId = document.getElementById("txnId").value.trim();
-
-      if (!name || !phone || !address) {
-        alert("దయచేసి పేరు, ఫోన్ నంబర్ మరియు అడ్రస్ పూర్తిగా నమోదు చేయండి.");
-        return;
-      }
-
-      // ఇక్కడ పేమెంట్ కచ్చితంగా చెక్ చేస్తుంది (కనీసం 8 నుండి 12 అంకెలు ఉండాలి)
-      if (!txnId || txnId.length < 8) {
-        alert("⚠️ దయచేసి ముందుగా పేమెంట్ పూర్తి చేసి, రశీదులో ఉన్న 12 అంకెల UTR / UPI Transaction ID ని నమోదు చేయండి. పేమెంట్ చేయకుండా ఆర్డర్ పంపలేరు!");
-        document.getElementById("txnId").focus();
-        return;
-      }
-
-      let orderText = "";
-      let total = 0;
-      cart.forEach((item, i) => {
-        const itemTotal = item.price * item.qty;
-        total += itemTotal;
-        orderText += `${i+1}. ${item.name} (${item.unit}) x ${item.qty} = ₹${itemTotal}\n`;
-      });
-
-      const message = `🛍️ *కొత్త పెయిడ్ ఆర్డర్ (My Mart)*\n` +
-                      `-----------------------------\n` +
-                      `👤 *పేరు:* ${name}\n` +
-                      `📞 *ఫోన్:* ${phone}\n` +
-                      `📍 *అడ్రస్:* ${address}\n` +
-                      `-----------------------------\n` +
-                      `💳 *పేమెంట్ స్టేటస్:* PAID ✅\n` +
-                      `🔢 *UPI UTR / Ref No:* ${txnId}\n` +
-                      `-----------------------------\n` +
-                      `🛒 *ఆర్డర్ చేసిన వస్తువులు:*\n${orderText}` +
-                      `-----------------------------\n` +
-                      `💰 *మొత్తం బిల్లు: ₹${total}*\n\n` +
-                      `*(దయచేసి మీ బ్యాంక్ యాప్‌లో పైన ఉన్న UTR నంబర్‌ని చెక్ చేసుకుని డెలివరీ పంపండి)*`;
-
-      window.open(`https://wa.me/${storeWhatsAppNumber}?text=${encodeURIComponent(message)}`, "_blank");
-      cart = [];
-      updateCart();
-      closeCheckout();
-    }
-
-    renderProducts(products);
-  </script>
-</body>
-</html>
-
+      // Oils, Ghee & Spices
+      ["ఫ్రీడమ్ సన్‌ఫ్లవర్ ఆయిల్ క్యాన్", "Oils", 660, "5 Litres", "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=300"],
+      ["ఫార్చ్యూన్ సన్‌ఫ్లవర్ ఆయిల్ పౌచ్", "Oils", 132, "1 Litre", "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=300"],
+      ["గోల్డ్ డ్రాప్ సన్‌ఫ్లవర్ ఆయిల్", "Oils", 130, "1 Litre", "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=300"],
+      ["విజయ వేరుశనగ నూనె (Groundnut)", "Oils", 190, "1 Litre", "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=300"],
+      ["నువ్వుల నూనె (Idhayam Sesame Oil)", "Oils", 260, "1 Litre", "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=300"],
+      ["ఆవనూనె (Fortune Mustard Oil)", "Oils", 165, "1 Litre", "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=300"],
+      ["కొబ్బరి వంట నూనె (KlF Coconad)", "Oils", 220, "1 Litre", "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=300"],
+      ["రైస్ బ్రన్ ఆయిల్ (Rice Bran)", "Oils", 145, "1 Litre", "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=300"],
+      ["ఆలివ్ ఆయిల్ (Figaro Olive Oil)", "Oils", 620, "500 ml", "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=300"],
+      ["దాల్డా వనస్పతి (Vanaspati)", "Oils", 110, "1 Litre", "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=300"],
+      ["టాటా ఉప్పు (Iodized Salt)", "Oils", 28, "1 kg", "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=300"],
+      ["టాటా రాక్ సాల్ట్ (Pink Salt)", "Oils", 95, "1 kg", "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=300"],
+      ["కల్లుప్పు (Crystal Salt)", "Oils", 20, "1 kg", "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=300"],
+      ["పంచదార బస్తా (Sugar)", "Oils", 225, "5 kg", "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=300"],
+      ["సేంద్రీయ బెల్లం ముద్దలు (Jaggery)", "Oils", 68, "1 kg", "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=300"],
+      ["బెల్లం పొడి (Jaggery Powder)", "Oils", 75, "1 kg", "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=300"],
+      ["గుంటూరు ఎండుమిర్చి (Spicy)", "Oils", 185, "1 kg", "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=300"],
+      ["బ్యాడిగి మిర్చి (కలర్ 
