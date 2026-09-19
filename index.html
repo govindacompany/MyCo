@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>మై మార్ట్ - డైరెక్ట్ UPI & WhatsApp</title>
+  <title>మై మార్ట్ - వెరిఫైడ్ UPI ఆర్డరింగ్</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
     body { background-color: #f7fafc; color: #2d3748; padding-bottom: 30px; }
@@ -46,13 +46,16 @@
     .form-group label { display: block; font-size: 12px; margin-bottom: 4px; font-weight: 600; }
     .form-group input, .form-group textarea { width: 100%; padding: 8px; border: 1px solid #cbd5e0; border-radius: 5px; font-size: 13px; }
 
-    /* QR Code & Direct Pay Area */
+    /* Payment Box */
     .payment-box { background: #eefdf7; border: 2px dashed #38b2ac; border-radius: 8px; padding: 12px; text-align: center; margin: 12px 0; }
-    .payment-box h4 { font-size: 14px; margin-bottom: 6px; color: #234e52; }
-    .qr-img { width: 150px; height: 150px; border-radius: 6px; border: 1px solid #ddd; margin: 6px auto; display: block; }
     .direct-pay-btn { display: inline-block; width: 100%; background: #0070ba; color: white; text-decoration: none; padding: 10px; border-radius: 6px; font-weight: bold; font-size: 14px; margin-top: 6px; }
-    .direct-pay-btn:active { background: #005ea6; }
+    .qr-img { width: 140px; height: 140px; border-radius: 6px; border: 1px solid #ddd; margin: 6px auto; display: block; }
     
+    /* Transaction ID Box */
+    .utr-box { background: #fffaf0; border: 1px solid #dd6b20; padding: 10px; border-radius: 6px; margin: 10px 0; }
+    .utr-box label { color: #c05621; font-weight: bold; font-size: 12px; }
+    .utr-box input { border: 2px solid #dd6b20; font-weight: bold; letter-spacing: 1px; }
+
     .whatsapp-submit-btn { background: #25d366; color: white; border: none; padding: 12px; border-radius: 6px; width: 100%; font-size: 15px; font-weight: bold; cursor: pointer; margin-top: 8px; }
   </style>
 </head>
@@ -92,10 +95,10 @@
     </div>
   </div>
 
-  <!-- Checkout & UPI Payment Modal -->
+  <!-- Modal -->
   <div class="modal" id="checkoutModal">
     <div class="modal-content">
-      <h2>ఆర్డర్ & చెల్లింపు వివరాలు</h2>
+      <h2>ఆర్డర్ & పేమెంట్ వివరాలు</h2>
       
       <div class="form-group">
         <label>మీ పేరు:</label>
@@ -110,22 +113,28 @@
         <textarea id="custAddress" rows="2" placeholder="ఇంటి నెం, వీధి, ఏరియా..."></textarea>
       </div>
 
-      <!-- UPI QR Code & Direct App Launch -->
+      <!-- UPI Payment Section -->
       <div class="payment-box">
         <h4>చెల్లించాల్సిన మొత్తం: <span id="pay-total-amount" style="color: #c53030; font-size: 16px;">₹0</span></h4>
         
-        <!-- Mobile Direct UPI Link (GPay/PhonePe App Trigger) -->
         <a id="upi-direct-link" href="#" class="direct-pay-btn">
-          ⚡ GPay / PhonePe / Paytm లో డైరెక్ట్‌గా ఓపెన్ చేయండి
+          ⚡ 1. ఇక్కడ నొక్కి UPI యాప్‌లో చెల్లించండి
         </a>
 
-        <div style="margin: 8px 0; font-size: 12px; color: #718096;">— లేదా స్క్రీన్ షాట్ తీసి QR స్కాన్ చేయండి —</div>
+        <div style="margin: 6px 0; font-size: 11px; color: #718096;">(లేదా క్రింది QR కోడ్‌కి చెల్లించండి)</div>
         <img id="upi-qr" class="qr-img" src="" alt="UPI QR Code">
         <small style="color: #4a5568; font-size: 11px;">UPI ID: <strong>9553354623@ybl</strong></small>
       </div>
 
+      <!-- Verification Input -->
+      <div class="utr-box">
+        <label>⚠️ 2. పేమెంట్ చేసాక వచ్చే 12 అంకెల UTR / Ref No. ఎంటర్ చేయండి:</label>
+        <input type="text" id="txnId" placeholder="12 అంకెల నంబర్ (ఉదా: 428192837482)" maxlength="16">
+        <small style="font-size: 10px; color: #744210;">(PhonePe/GPay పేమెంట్ రిసిప్ట్‌లో UTR/UPI Ref No ఉంటుంది)</small>
+      </div>
+
       <button class="whatsapp-submit-btn" onclick="sendWhatsAppOrder()">
-        📲 పేమెంట్ పూర్తి చేసి WhatsApp లో ఆర్డర్ పంపండి
+        ✅ పేమెంట్ వెరిఫై చేసి ఆర్డర్ పంపండి
       </button>
       <button style="width: 100%; margin-top: 8px; background: none; border: none; color: #718096; cursor: pointer; font-size: 13px;" onclick="closeCheckout()">రద్దు చేయండి</button>
     </div>
@@ -220,12 +229,10 @@
       const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
       document.getElementById("pay-total-amount").innerText = `₹${totalPrice}`;
 
-      // UPI Intent Deep Link (NPCI Standard)
       const upiUrl = `upi://pay?pa=${storeUPI}&pn=${encodeURIComponent(storeName)}&am=${totalPrice}&cu=INR&tn=Order%20Payment`;
       document.getElementById("upi-direct-link").setAttribute("href", upiUrl);
 
-      // డైనమిక్ QR కోడ్ జనరేషన్
-      const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(upiUrl)}`;
+      const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(upiUrl)}`;
       document.getElementById("upi-qr").setAttribute("src", qrApiUrl);
 
       toggleCart();
@@ -238,9 +245,17 @@
       const name = document.getElementById("custName").value.trim();
       const phone = document.getElementById("custPhone").value.trim();
       const address = document.getElementById("custAddress").value.trim();
+      const txnId = document.getElementById("txnId").value.trim();
 
       if (!name || !phone || !address) {
-        alert("దయచేసి మీ పేరు, ఫోన్ నంబర్ మరియు అడ్రస్ నమోదు చేయండి.");
+        alert("దయచేసి పేరు, ఫోన్ నంబర్ మరియు అడ్రస్ పూర్తిగా నమోదు చేయండి.");
+        return;
+      }
+
+      // ఇక్కడ పేమెంట్ కచ్చితంగా చెక్ చేస్తుంది (కనీసం 8 నుండి 12 అంకెలు ఉండాలి)
+      if (!txnId || txnId.length < 8) {
+        alert("⚠️ దయచేసి ముందుగా పేమెంట్ పూర్తి చేసి, రశీదులో ఉన్న 12 అంకెల UTR / UPI Transaction ID ని నమోదు చేయండి. పేమెంట్ చేయకుండా ఆర్డర్ పంపలేరు!");
+        document.getElementById("txnId").focus();
         return;
       }
 
@@ -252,17 +267,19 @@
         orderText += `${i+1}. ${item.name} (${item.unit}) x ${item.qty} = ₹${itemTotal}\n`;
       });
 
-      const message = `🛍️ *కొత్త ఆర్డర్ (My Mart)*\n` +
+      const message = `🛍️ *కొత్త పెయిడ్ ఆర్డర్ (My Mart)*\n` +
                       `-----------------------------\n` +
                       `👤 *పేరు:* ${name}\n` +
                       `📞 *ఫోన్:* ${phone}\n` +
                       `📍 *అడ్రస్:* ${address}\n` +
-                      `💳 *పేమెంట్:* UPI ద్వారా పూర్తయింది\n` +
                       `-----------------------------\n` +
-                      `🛒 *వస్తువులు:*\n${orderText}` +
+                      `💳 *పేమెంట్ స్టేటస్:* PAID ✅\n` +
+                      `🔢 *UPI UTR / Ref No:* ${txnId}\n` +
+                      `-----------------------------\n` +
+                      `🛒 *ఆర్డర్ చేసిన వస్తువులు:*\n${orderText}` +
                       `-----------------------------\n` +
                       `💰 *మొత్తం బిల్లు: ₹${total}*\n\n` +
-                      `దయచేసి ఆర్డర్ నిర్ధారించండి!`;
+                      `*(దయచేసి మీ బ్యాంక్ యాప్‌లో పైన ఉన్న UTR నంబర్‌ని చెక్ చేసుకుని డెలివరీ పంపండి)*`;
 
       window.open(`https://wa.me/${storeWhatsAppNumber}?text=${encodeURIComponent(message)}`, "_blank");
       cart = [];
