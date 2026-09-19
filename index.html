@@ -3,24 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>డైలీ ఫ్రెష్ మార్ట్ - WhatsApp ఆర్డరింగ్</title>
+  <title>మై మార్ట్ - డైరెక్ట్ UPI & WhatsApp</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
-    body { background-color: #f7fafc; color: #2d3748; }
-    header { background-color: #128c7e; color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    body { background-color: #f7fafc; color: #2d3748; padding-bottom: 30px; }
+    header { background-color: #128c7e; color: white; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
     header h1 { font-size: 18px; font-weight: 700; }
     .cart-btn { background: #25d366; color: white; border: none; padding: 8px 14px; border-radius: 20px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 14px; }
-    .container { max-width: 1100px; margin: 15px auto; padding: 0 12px; }
+    .container { max-width: 1000px; margin: 15px auto; padding: 0 12px; }
+    
+    /* Categories */
     .filters { display: flex; gap: 8px; margin-bottom: 15px; overflow-x: auto; padding-bottom: 5px; }
     .filter-btn { background: white; border: 1px solid #cbd5e0; padding: 6px 14px; border-radius: 20px; cursor: pointer; font-size: 13px; font-weight: 600; white-space: nowrap; }
     .filter-btn.active { background: #128c7e; color: white; border-color: #128c7e; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+
+    /* Product Grid */
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
     .card { background: white; border-radius: 8px; padding: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between; }
     .card img { width: 100%; height: 110px; object-fit: cover; border-radius: 6px; margin-bottom: 8px; }
     .card h3 { font-size: 14px; margin-bottom: 4px; }
-    .card .unit { color: #718096; font-size: 12px; margin-bottom: 6px; }
+    .card .unit { color: #718096; font-size: 12px; margin-bottom: 4px; }
     .card .price { font-size: 15px; font-weight: bold; color: #2d3748; margin-bottom: 8px; }
     .add-btn { background-color: #128c7e; color: white; border: none; padding: 8px; border-radius: 5px; cursor: pointer; font-weight: 600; width: 100%; font-size: 13px; }
+
+    /* Cart Sidebar */
     .cart-drawer { position: fixed; right: -100%; top: 0; width: 100%; max-width: 360px; height: 100%; background: white; box-shadow: -4px 0 15px rgba(0,0,0,0.15); transition: right 0.3s ease; z-index: 200; display: flex; flex-direction: column; }
     .cart-drawer.open { right: 0; }
     .cart-header { padding: 15px; background: #128c7e; color: white; display: flex; justify-content: space-between; align-items: center; }
@@ -30,18 +36,28 @@
     .cart-footer { padding: 15px; border-top: 1px solid #e2e8f0; background: #f8fafc; }
     .total-row { display: flex; justify-content: space-between; font-size: 16px; font-weight: bold; margin-bottom: 12px; }
     .checkout-btn { width: 100%; background: #25d366; color: white; border: none; padding: 12px; border-radius: 6px; font-size: 15px; font-weight: bold; cursor: pointer; }
-    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 300; justify-content: center; align-items: center; }
+
+    /* Checkout Modal */
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 300; justify-content: center; align-items: center; overflow-y: auto; }
     .modal.active { display: flex; }
-    .modal-content { background: white; padding: 20px; border-radius: 10px; width: 92%; max-width: 400px; }
+    .modal-content { background: white; padding: 18px; border-radius: 10px; width: 92%; max-width: 420px; max-height: 90vh; overflow-y: auto; }
     .modal-content h2 { margin-bottom: 10px; font-size: 17px; color: #128c7e; }
     .form-group { margin-bottom: 10px; }
     .form-group label { display: block; font-size: 12px; margin-bottom: 4px; font-weight: 600; }
-    .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 8px; border: 1px solid #cbd5e0; border-radius: 5px; font-size: 13px; }
-    .upi-box { background: #e6fffa; border: 1px dashed #38b2ac; padding: 8px; border-radius: 6px; margin-bottom: 10px; font-size: 12px; text-align: center; }
-    .whatsapp-submit-btn { background: #25d366; color: white; border: none; padding: 12px; border-radius: 6px; width: 100%; font-size: 15px; font-weight: bold; cursor: pointer; }
+    .form-group input, .form-group textarea { width: 100%; padding: 8px; border: 1px solid #cbd5e0; border-radius: 5px; font-size: 13px; }
+
+    /* QR Code & Direct Pay Area */
+    .payment-box { background: #eefdf7; border: 2px dashed #38b2ac; border-radius: 8px; padding: 12px; text-align: center; margin: 12px 0; }
+    .payment-box h4 { font-size: 14px; margin-bottom: 6px; color: #234e52; }
+    .qr-img { width: 150px; height: 150px; border-radius: 6px; border: 1px solid #ddd; margin: 6px auto; display: block; }
+    .direct-pay-btn { display: inline-block; width: 100%; background: #0070ba; color: white; text-decoration: none; padding: 10px; border-radius: 6px; font-weight: bold; font-size: 14px; margin-top: 6px; }
+    .direct-pay-btn:active { background: #005ea6; }
+    
+    .whatsapp-submit-btn { background: #25d366; color: white; border: none; padding: 12px; border-radius: 6px; width: 100%; font-size: 15px; font-weight: bold; cursor: pointer; margin-top: 8px; }
   </style>
 </head>
 <body>
+
   <header>
     <h1>🛒 మై స్టోర్ (My Mart)</h1>
     <button class="cart-btn" onclick="toggleCart()">🛒 కార్ట్ (<span id="cart-count">0</span>)</button>
@@ -58,6 +74,7 @@
     <div class="grid" id="product-grid"></div>
   </div>
 
+  <!-- Cart Drawer -->
   <div class="cart-drawer" id="cartDrawer">
     <div class="cart-header">
       <h3>మీ కార్ట్ (Cart)</h3>
@@ -71,17 +88,15 @@
         <span>మొత్తం బిల్లు:</span>
         <span id="cart-total">₹0</span>
       </div>
-      <button class="checkout-btn" onclick="openCheckout()">ఆర్డర్ వివరాలు నమోదు చేయండి</button>
+      <button class="checkout-btn" onclick="openCheckout()">ఆర్డర్ & పేమెంట్ చేయండి</button>
     </div>
   </div>
 
+  <!-- Checkout & UPI Payment Modal -->
   <div class="modal" id="checkoutModal">
     <div class="modal-content">
-      <h2>ఆర్డర్ & డెలివరీ వివరాలు</h2>
-      <div class="upi-box">
-        💡 <strong>ఆన్‌లైన్ పేమెంట్ UPI ID:</strong><br>
-        <span style="font-weight: bold; color: #128c7e;" id="display-upi">9553354623@ybl</span>
-      </div>
+      <h2>ఆర్డర్ & చెల్లింపు వివరాలు</h2>
+      
       <div class="form-group">
         <label>మీ పేరు:</label>
         <input type="text" id="custName" placeholder="ఉదా: రాము">
@@ -91,24 +106,35 @@
         <input type="tel" id="custPhone" placeholder="ఉదా: 9876543210">
       </div>
       <div class="form-group">
-        <label>పూర్తి డెలివరీ అడ్రస్:</label>
+        <label>డెలివరీ అడ్రస్:</label>
         <textarea id="custAddress" rows="2" placeholder="ఇంటి నెం, వీధి, ఏరియా..."></textarea>
       </div>
-      <div class="form-group">
-        <label>చెల్లింపు విధానం (Payment):</label>
-        <select id="payOption">
-          <option value="UPI Online (GPay/PhonePe)">GPay / PhonePe ఆన్‌లైన్ పేమెంట్</option>
-          <option value="Cash on Delivery (COD)">క్యాష్ ఆన్ డెలివరీ (Cash on Delivery)</option>
-        </select>
+
+      <!-- UPI QR Code & Direct App Launch -->
+      <div class="payment-box">
+        <h4>చెల్లించాల్సిన మొత్తం: <span id="pay-total-amount" style="color: #c53030; font-size: 16px;">₹0</span></h4>
+        
+        <!-- Mobile Direct UPI Link (GPay/PhonePe App Trigger) -->
+        <a id="upi-direct-link" href="#" class="direct-pay-btn">
+          ⚡ GPay / PhonePe / Paytm లో డైరెక్ట్‌గా ఓపెన్ చేయండి
+        </a>
+
+        <div style="margin: 8px 0; font-size: 12px; color: #718096;">— లేదా స్క్రీన్ షాట్ తీసి QR స్కాన్ చేయండి —</div>
+        <img id="upi-qr" class="qr-img" src="" alt="UPI QR Code">
+        <small style="color: #4a5568; font-size: 11px;">UPI ID: <strong>9553354623@ybl</strong></small>
       </div>
-      <button class="whatsapp-submit-btn" onclick="sendWhatsAppOrder()">📲 WhatsApp లో ఆర్డర్ పంపండి</button>
-      <button style="width: 100%; margin-top: 10px; background: none; border: none; color: #718096; cursor: pointer;" onclick="closeCheckout()">రద్దు చేయండి</button>
+
+      <button class="whatsapp-submit-btn" onclick="sendWhatsAppOrder()">
+        📲 పేమెంట్ పూర్తి చేసి WhatsApp లో ఆర్డర్ పంపండి
+      </button>
+      <button style="width: 100%; margin-top: 8px; background: none; border: none; color: #718096; cursor: pointer; font-size: 13px;" onclick="closeCheckout()">రద్దు చేయండి</button>
     </div>
   </div>
 
   <script>
     const storeWhatsAppNumber = "919553354623";
     const storeUPI = "9553354623@ybl";
+    const storeName = "My Mart";
 
     const products = [
       { id: 1, name: "సోనా మసూరి బియ్యం", cat: "Grains & Dals", price: 650, unit: "10 kg", img: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=300" },
@@ -187,21 +213,34 @@
     }
 
     function toggleCart() { document.getElementById("cartDrawer").classList.toggle("open"); }
+
     function openCheckout() {
       if (cart.length === 0) { alert("ముందుగా కొన్ని వస్తువులను కార్ట్‌లో జోడించండి!"); return; }
+      
+      const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+      document.getElementById("pay-total-amount").innerText = `₹${totalPrice}`;
+
+      // UPI Intent Deep Link (NPCI Standard)
+      const upiUrl = `upi://pay?pa=${storeUPI}&pn=${encodeURIComponent(storeName)}&am=${totalPrice}&cu=INR&tn=Order%20Payment`;
+      document.getElementById("upi-direct-link").setAttribute("href", upiUrl);
+
+      // డైనమిక్ QR కోడ్ జనరేషన్
+      const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(upiUrl)}`;
+      document.getElementById("upi-qr").setAttribute("src", qrApiUrl);
+
       toggleCart();
       document.getElementById("checkoutModal").classList.add("active");
     }
+
     function closeCheckout() { document.getElementById("checkoutModal").classList.remove("active"); }
 
     function sendWhatsAppOrder() {
       const name = document.getElementById("custName").value.trim();
       const phone = document.getElementById("custPhone").value.trim();
       const address = document.getElementById("custAddress").value.trim();
-      const payOption = document.getElementById("payOption").value;
 
       if (!name || !phone || !address) {
-        alert("దయచేసి పేరు, ఫోన్ నంబర్ మరియు అడ్రస్ నమోదు చేయండి.");
+        alert("దయచేసి మీ పేరు, ఫోన్ నంబర్ మరియు అడ్రస్ నమోదు చేయండి.");
         return;
       }
 
@@ -213,7 +252,18 @@
         orderText += `${i+1}. ${item.name} (${item.unit}) x ${item.qty} = ₹${itemTotal}\n`;
       });
 
-      const message = `🛍️ *కొత్త ఆర్డర్ (My Mart)*\n-----------------------------\n👤 *పేరు:* ${name}\n📞 *ఫోన్:* ${phone}\n📍 *అడ్రస్:* ${address}\n💳 *పేమెంట్:* ${payOption}\n-----------------------------\n🛒 *వస్తువులు:*\n${orderText}-----------------------------\n💰 *మొత్తం బిల్లు: ₹${total}*`;
+      const message = `🛍️ *కొత్త ఆర్డర్ (My Mart)*\n` +
+                      `-----------------------------\n` +
+                      `👤 *పేరు:* ${name}\n` +
+                      `📞 *ఫోన్:* ${phone}\n` +
+                      `📍 *అడ్రస్:* ${address}\n` +
+                      `💳 *పేమెంట్:* UPI ద్వారా పూర్తయింది\n` +
+                      `-----------------------------\n` +
+                      `🛒 *వస్తువులు:*\n${orderText}` +
+                      `-----------------------------\n` +
+                      `💰 *మొత్తం బిల్లు: ₹${total}*\n\n` +
+                      `దయచేసి ఆర్డర్ నిర్ధారించండి!`;
+
       window.open(`https://wa.me/${storeWhatsAppNumber}?text=${encodeURIComponent(message)}`, "_blank");
       cart = [];
       updateCart();
