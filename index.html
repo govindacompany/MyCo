@@ -4,44 +4,84 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>సూపర్ మార్ట్ | Super Mart</title>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; }
-    body { background-color: #f4f6f8; color: #2d3748; padding-bottom: 50px; }
-    header { background-color: #128c7e; color: white; padding: 12px 16px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-    .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-    .header-top h1 { font-size: 17px; font-weight: bold; }
-    .cart-btn { background: #25d366; color: white; border: none; padding: 7px 14px; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 13px; }
-    .search-bar input { width: 100%; padding: 9px 15px; border-radius: 20px; border: none; outline: none; font-size: 13px; }
-    .category-nav { background: white; padding: 8px 10px; display: flex; gap: 6px; overflow-x: auto; position: sticky; top: 85px; z-index: 90; box-shadow: 0 2px 4px rgba(0,0,0,0.05); scrollbar-width: none; }
+    :root {
+      --primary-color: #1a365d;       /* డార్క్ రాయల్ బ్లూ - హెడర్ మరియు ముఖ్య బటన్లు */
+      --secondary-color: #f59e0b;     /* గోల్డెన్ ఆరెంజ్ - లోగో & ప్రైస్ హైలైట్స్ */
+      --accent-green: #10b981;        /* కార్ట్ & ఆర్డర్ బటన్ */
+      --bg-color: #f8fafc;            /* సాఫ్ట్ లైట్ బ్యాక్‌గ్రౌండ్ */
+      --card-border: #e2e8f0;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+    body { background-color: var(--bg-color); color: var(--text-main); padding-bottom: 50px; }
+
+    /* Main Header */
+    header { background: linear-gradient(135deg, var(--primary-color) 0%, #2b6cb0 100%); color: white; padding: 12px 16px; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+    .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    
+    /* Logo Branding */
+    .brand-logo { display: flex; align-items: center; gap: 8px; }
+    .logo-badge { background: var(--secondary-color); color: var(--primary-color); font-weight: 800; font-size: 15px; padding: 4px 8px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.15); letter-spacing: 0.5px; }
+    .header-top h1 { font-size: 17px; font-weight: 700; letter-spacing: -0.3px; }
+
+    .cart-btn { background: var(--accent-green); color: white; border: none; padding: 8px 14px; border-radius: 20px; font-weight: 700; cursor: pointer; font-size: 13px; box-shadow: 0 2px 4px rgba(0,0,0,0.15); }
+
+    .search-bar input { width: 100%; padding: 10px 16px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.2); outline: none; font-size: 13px; background: #ffffff; color: var(--text-main); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+
+    /* Category Navigation */
+    .category-nav { background: #ffffff; padding: 10px 12px; display: flex; gap: 8px; overflow-x: auto; position: sticky; top: 92px; z-index: 90; box-shadow: 0 2px 4px rgba(0,0,0,0.03); scrollbar-width: none; border-bottom: 1px solid var(--card-border); }
     .category-nav::-webkit-scrollbar { display: none; }
-    .cat-btn { background: #edf2f7; border: 1px solid #cbd5e0; padding: 6px 12px; border-radius: 16px; font-size: 12px; font-weight: 600; white-space: nowrap; cursor: pointer; color: #4a5568; }
-    .cat-btn.active { background: #128c7e; color: white; border-color: #128c7e; }
-    .container { max-width: 950px; margin: 12px auto; padding: 0 10px; }
-    .section-title { font-size: 15px; font-weight: bold; margin-bottom: 10px; color: #2d3748; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); gap: 10px; }
-    .card { background: white; border-radius: 8px; padding: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); display: flex; flex-direction: column; justify-content: space-between; border: 1px solid #e2e8f0; position: relative; }
-    .card h3 { font-size: 13px; margin: 5px 0; line-height: 1.3; min-height: 34px; }
-    .card .price { font-weight: bold; color: #128c7e; font-size: 15px; margin-bottom: 6px; }
-    .add-btn { background: #128c7e; color: white; border: none; padding: 7px; border-radius: 5px; width: 100%; font-weight: bold; cursor: pointer; font-size: 12px; }
-    .card.out-of-stock { opacity: 0.6; background: #fff5f5; }
-    .stock-badge { position: absolute; top: 6px; right: 6px; background: #e53e3e; color: white; font-size: 10px; font-weight: bold; padding: 2px 5px; border-radius: 4px; }
-    .btn-disabled { background: #a0aec0 !important; cursor: not-allowed; }
-    .cart-box { background: white; border: 2px solid #128c7e; border-radius: 8px; padding: 14px; margin-top: 20px; display: none; }
-    .form-group { margin: 8px 0; }
-    .form-group label { display: block; font-size: 11px; margin-bottom: 3px; font-weight: bold; }
-    .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px; font-size: 13px; }
-    .payment-box { background: #eefdf7; border: 2px dashed #38b2ac; border-radius: 8px; padding: 10px; text-align: center; margin: 10px 0; }
-    .direct-pay-btn { display: inline-block; width: 100%; background: #0070ba; color: white; text-decoration: none; padding: 9px; border-radius: 6px; font-weight: bold; font-size: 13px; margin-top: 5px; }
-    .card-pay-btn { display: inline-block; width: 100%; background: #6772e5; color: white; text-decoration: none; padding: 10px; border-radius: 6px; font-weight: bold; font-size: 13px; margin-top: 5px; text-align: center; }
-    .qr-img { width: 120px; height: 120px; border-radius: 6px; border: 1px solid #ddd; margin: 5px auto; display: block; }
-    .verify-box { background: #fffaf0; border: 1px solid #dd6b20; padding: 8px; border-radius: 6px; margin: 8px 0; }
-    .order-btn { background: #25d366; color: white; border: none; padding: 12px; width: 100%; border-radius: 6px; font-weight: bold; font-size: 15px; cursor: pointer; margin-top: 8px; }
+    .cat-btn { background: #f1f5f9; border: 1px solid var(--card-border); padding: 7px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; white-space: nowrap; cursor: pointer; color: var(--text-muted); transition: all 0.2s ease; }
+    .cat-btn.active { background: var(--primary-color); color: white; border-color: var(--primary-color); box-shadow: 0 2px 4px rgba(26,54,93,0.2); }
+
+    .container { max-width: 950px; margin: 16px auto; padding: 0 12px; }
+    .section-title { font-size: 16px; font-weight: 700; margin-bottom: 12px; color: var(--text-main); }
+
+    /* Product Grid */
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); gap: 12px; }
+    .card { background: white; border-radius: 12px; padding: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between; border: 1px solid var(--card-border); position: relative; transition: transform 0.15s ease; }
+    .card:active { transform: scale(0.98); }
+    .card h3 { font-size: 13px; font-weight: 600; margin: 6px 0; line-height: 1.35; min-height: 35px; color: var(--text-main); }
+    .card .price { font-weight: 800; color: var(--primary-color); font-size: 16px; margin-bottom: 8px; }
+    .add-btn { background: var(--primary-color); color: white; border: none; padding: 8px; border-radius: 8px; width: 100%; font-weight: 600; cursor: pointer; font-size: 12px; }
+
+    /* Out of Stock */
+    .card.out-of-stock { opacity: 0.6; background: #fff5f5; border-color: #fed7d7; }
+    .stock-badge { position: absolute; top: 8px; right: 8px; background: #ef4444; color: white; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px; }
+    .btn-disabled { background: #94a3b8 !important; cursor: not-allowed; }
+
+    /* Cart Box */
+    .cart-box { background: white; border: 2px solid var(--primary-color); border-radius: 12px; padding: 16px; margin-top: 24px; display: none; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+    .form-group { margin: 10px 0; }
+    .form-group label { display: block; font-size: 11px; margin-bottom: 4px; font-weight: 700; color: var(--text-muted); }
+    .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; font-family: inherit; }
+
+    /* Payment Styles */
+    .payment-box { background: #f0fdf4; border: 2px dashed #86efac; border-radius: 8px; padding: 12px; text-align: center; margin: 12px 0; }
+    .direct-pay-btn { display: inline-block; width: 100%; background: #0284c7; color: white; text-decoration: none; padding: 10px; border-radius: 8px; font-weight: 700; font-size: 13px; margin-top: 6px; }
+    .card-pay-btn { display: inline-block; width: 100%; background: #6366f1; color: white; text-decoration: none; padding: 10px; border-radius: 8px; font-weight: 700; font-size: 13px; margin-top: 6px; text-align: center; }
+    .qr-img { width: 130px; height: 130px; border-radius: 8px; border: 1px solid #e2e8f0; margin: 8px auto; display: block; }
+    .verify-box { background: #fffbeb; border: 1px solid #fde68a; padding: 10px; border-radius: 8px; margin: 10px 0; }
+    .order-btn { background: var(--accent-green); color: white; border: none; padding: 14px; width: 100%; border-radius: 8px; font-weight: 700; font-size: 15px; cursor: pointer; margin-top: 10px; }
   </style>
 </head>
 <body>
+
+  <!-- Top Header with Custom Brand Logo -->
   <header>
     <div class="header-top">
-      <h1>🛒 సూపర్ మార్ట్ (Super Mart)</h1>
+      <div class="brand-logo">
+        <span class="logo-badge">SG</span>
+        <h1>సూపర్ మార్ట్ (Super Mart)</h1>
+      </div>
       <button class="cart-btn" onclick="showCart()">🛒 కార్ట్ / Cart (<span id="cart-cnt">0</span>)</button>
     </div>
     <div class="search-bar">
@@ -49,6 +89,7 @@
     </div>
   </header>
 
+  <!-- Bilingual Category Navigation -->
   <div class="category-nav">
     <button class="cat-btn active" onclick="setCategory('All', this)">అన్నీ (All 500)</button>
     <button class="cat-btn" onclick="setCategory('Grains', this)">🌾 బియ్యం & పప్పులు (Grains & Dals)</button>
@@ -63,17 +104,19 @@
     <div class="section-title" id="catHeading">అన్ని ఉత్పత్తులు / All Products (500)</div>
     <div class="grid" id="grid"></div>
 
+    <!-- Cart & Payment Section -->
     <div class="cart-box" id="cartBox">
-      <h3 style="color:#128c7e; margin-bottom: 8px;">ఆర్డర్ & పేమెంట్ వివరాలు / Order & Payment Details</h3>
+      <h3 style="color: var(--primary-color); margin-bottom: 8px; font-weight: 800;">ఆర్డర్ & పేమెంట్ వివరాలు / Order Details</h3>
       <div id="cartItems" style="margin: 8px 0; font-size: 13px;"></div>
-      <div style="font-weight: bold; font-size: 16px; margin: 8px 0;">
+      <div style="font-weight: 800; font-size: 17px; margin: 10px 0; color: var(--primary-color);">
         మొత్తం బిల్లు / Total Bill: ₹<span id="totalPrice">0</span>
       </div>
       
       <div class="form-group"><label>మీ పేరు / Your Name:</label><input type="text" id="cname" placeholder="ఉదా: రాము / Ramu"></div>
       <div class="form-group"><label>మొబైల్ నంబర్ / Mobile Number:</label><input type="tel" id="cphone" placeholder="ఉదా: 9876543210"></div>
-      <div class="form-group"><label>పూర్తి అడ్రస్ / Delivery Address:</label><textarea id="caddr" rows="2" placeholder="ఇంటి నెం, వీధి, ఊరు... / Door No, Street, Landmark..."></textarea></div>
+      <div class="form-group"><label>పూర్తి అడ్రస్ / Delivery Address:</label><textarea id="caddr" rows="2" placeholder="ఇంటి నెం, వీధి, ఊరు... / Door No, Street..."></textarea></div>
 
+      <!-- Payment Mode Selector -->
       <div class="form-group">
         <label>చెల్లింపు విధానం / Payment Method:</label>
         <select id="payOption" onchange="togglePaymentSection()">
@@ -83,38 +126,41 @@
         </select>
       </div>
 
+      <!-- 1. UPI Section -->
       <div id="upi-container">
         <div class="payment-box">
-          <h4>మొత్తం చెల్లించాల్సింది / Pay Total: ₹<span id="upi-amt">0</span></h4>
+          <h4 style="color: #15803d;">మొత్తం చెల్లించాల్సింది / Pay Total: ₹<span id="upi-amt">0</span></h4>
           <a id="upi-direct-link" href="#" class="direct-pay-btn">⚡ 1. GPay / PhonePe లో చెల్లించండి (Pay via UPI App)</a>
-          <div style="margin: 4px 0; font-size: 11px; color: #718096;">(లేదా క్రింది QR కోడ్‌కి చెల్లించండి / Or scan QR code)</div>
+          <div style="margin: 6px 0; font-size: 11px; color: var(--text-muted);">(లేదా క్రింది QR కోడ్‌కి చెల్లించండి / Or scan QR code)</div>
           <img id="upi-qr" class="qr-img" src="" alt="UPI QR">
-          <small style="font-size: 11px;">UPI ID: <strong>9553354623@ybl</strong></small>
+          <small style="font-size: 11px; font-weight: 600;">UPI ID: <strong>9553354623@ybl</strong></small>
         </div>
         <div class="verify-box">
-          <label style="color:#c05621; font-size: 11px; font-weight: bold;">⚠️ 2. పేమెంట్ చేసాక 12 అంకెల UTR నంబర్ నమోదు చేయండి / Enter 12-digit UTR No:</label>
+          <label style="color:#b45309; font-size: 11px; font-weight: 700;">⚠️ 2. పేమెంట్ చేసాక 12 అంకెల UTR నంబర్ నమోదు చేయండి / Enter 12-digit UTR No:</label>
           <input type="text" id="txnId" placeholder="12 అంకెల UTR / Ref No." maxlength="16">
         </div>
       </div>
 
+      <!-- 2. Card Section -->
       <div id="card-container" style="display: none;">
-        <div class="payment-box" style="background: #f7f9fd; border-color: #6772e5;">
-          <h4>మొత్తం / Amount: ₹<span id="card-amt">0</span></h4>
+        <div class="payment-box" style="background: #f8fafc; border-color: #cbd5e1;">
+          <h4 style="color: var(--primary-color);">మొత్తం / Amount: ₹<span id="card-amt">0</span></h4>
           <a id="card-gateway-link" href="https://razorpay.me/@mymart" target="_blank" class="card-pay-btn">💳 కార్డ్ పేమెంట్ గేట్‌వే ఓపెన్ చేయండి / Open Card Gateway</a>
         </div>
         <div class="verify-box">
-          <label style="color:#c05621; font-size: 11px; font-weight: bold;">⚠️ కార్డ్ పేమెంట్ ID నమోదు చేయండి / Enter Card Payment ID:</label>
+          <label style="color:#b45309; font-size: 11px; font-weight: 700;">⚠️ కార్డ్ పేమెంట్ ID నమోదు చేయండి / Enter Card Payment ID:</label>
           <input type="text" id="cardTxnId" placeholder="ఉదా / Ex: pay_Nq87s2..." maxlength="25">
         </div>
       </div>
 
-      <div id="cod-info-box" style="background: #ebf8ff; border: 1px solid #3182ce; padding: 10px; border-radius: 6px; font-size: 12px; color: #2b6cb0; text-align: center; display: none;">
+      <!-- 3. COD Section -->
+      <div id="cod-info-box" style="background: #eff6ff; border: 1px solid #bfdbfe; padding: 12px; border-radius: 8px; font-size: 12px; color: #1e40af; text-align: center; display: none;">
         💵 <strong>క్యాష్ ఆన్ డెలివరీ / Cash on Delivery:</strong><br>
         సరుకులు అందిన తర్వాత నగదు చెల్లించవచ్చు / Pay cash upon delivery.
       </div>
 
       <button class="order-btn" onclick="sendOrder()">📲 WhatsApp లో ఆర్డర్ చేయండి / Order via WhatsApp</button>
-      <button style="width: 100%; margin-top: 8px; background: none; border: none; color: #718096; cursor: pointer; font-size: 12px;" onclick="hideCart()">రద్దు చేయండి / Cancel</button>
+      <button style="width: 100%; margin-top: 10px; background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 12px;" onclick="hideCart()">రద్దు చేయండి / Cancel</button>
     </div>
   </div>
 
@@ -196,7 +242,7 @@
     function render(list) {
       const grid = document.getElementById('grid');
       if (!list.length) {
-        grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #718096; padding: 30px;">వస్తువులు ఏవీ దొరకలేదు / No items found.</p>`;
+        grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 30px;">వస్తువులు ఏవీ దొరకలేదు / No items found.</p>`;
         return;
       }
       grid.innerHTML = list.map(p => `
